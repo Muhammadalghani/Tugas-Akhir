@@ -1,0 +1,83 @@
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Distributors extends CI_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model('distributor_model', 'distributor');     
+        $this->load->helper('url','html','form'); //tambahan
+        // $this->load->library('form_validation');
+    }
+
+    public function index()
+    {
+        $query = $this->distributor->get();
+        $isi    = array('header'    => 'Simpudi-Tampil Data distributor',
+                        'content'   => 'admin/distributor/tampil_datadistributor',
+                        'judul'     => 'Input Data User',
+                        'sub_judul' => 'Distributor'
+                        );
+        // $isi['distributors'] = $this->distributor->getAll(); //database di model
+        $this->load->view('admin/admin_home', $isi); //untuk tampilan menu dan css
+    }
+
+    public function add()
+    {
+        $isi    = array('header'    => 'Simpudi-Tambah Data Distributor',
+                        'content'   => 'admin/distributor/new_form', //untuk menampilkan konten
+                        'judul'     => 'Distributor',
+                        'sub_judul' => 'Tambah Data'
+                        );
+        $this->load->view('admin/admin_home', $isi); //untuk tampilan menu dan css
+    }
+
+    public function edit($id = null)
+    {
+        $isi['content']      = 'admin/distributor/edit'; //untuk menampilkan konten
+        $isi['judul']        = 'Input Data User';
+        $isi['sub_judul']    = 'Distributor';
+
+        if (!isset($id)) redirect('admin/distributor/tampil_datadistributor');
+       
+        $distributors = $this->distributor;
+        // $validation = $this->form_validation;
+        // $validation->set_rules($distributors->rules());
+
+        /*if ($validation->run())*/ {
+            $distributors->update();
+            $this->session->set_flashdata('success', 'Berhasil disimpan');
+        }
+
+        $isi["distributors"] = $distributors->getById($id);
+        if (!$isi["distributors"]) show_404();
+        
+        $this->load->view("admin/admin_home", $isi);
+    }
+
+    public function delete($id=null)
+    {
+        $isi['content']      = 'admin/distributor/tampil_datadistributor'; //untuk menampilkan konten
+        $isi['judul']        = 'Input Data User';
+        $isi['sub_judul']    = 'Distributor';
+
+        if (!isset($id)) show_404();
+        
+        if ($this->distributor->delete($id)) {
+            redirect(site_url('admin/distributor/tampil_datadistributor'));
+        }
+    }
+
+    public function proses ()
+    {
+        if(isset($_POST['tambah'])) {
+            $inputan = $this->input->post(null, TRUE);
+            $this->distributor->tambah($inputan);
+        } else if(isset($_POST['edit'])) {
+            echo "proses sdit data";
+        }
+        redirect(site_url('admin/distributors'));
+    }
+}

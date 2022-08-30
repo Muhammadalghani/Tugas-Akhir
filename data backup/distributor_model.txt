@@ -1,0 +1,102 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Distributor_model extends CI_Model
+{
+    private $_table = "distributor"; //nama tabel 
+    /*nama kolom di tabel database*/
+    public $distributor_id;
+    public $nama_distributor;
+    public $alamat;
+    public $nama_usaha;
+    public $tahun_berdiri;
+    public $no_hp; 
+ 
+    public function rules()
+    {
+        return [
+            ['field' => 'nama_distributor',
+            'label' => 'Nama Distributor',
+            'rules' => 'required'],
+
+            ['field' => 'alamat',
+            'label' => 'Alamat',
+            'rules' => 'required'],
+            
+            ['field' => 'nama_usaha',
+            'label' => 'Nama Usaha',
+            'rules' => 'required'],
+
+            ['field' => 'tahun_berdiri',
+            'label' => 'Tahun Berdiri',
+            'rules' => 'required'],
+
+            ['field' => 'no_hp',
+            'label' => 'Nomor HP',
+            'rules' => 'required'],
+        ];
+    }
+
+    // dari tutorial
+    public function get($id=null)
+    {
+        $this->db->select('*');
+        $this->db->from('distributor');
+        if ($id != null) {
+            $this->db->where('distributor_id', $id);
+        }
+        $query = $this->db->get();
+        return $query;
+    }
+    
+
+
+    public function getAll()
+    {
+        return $this->db->get($this->_table)->result();
+    }
+    
+    public function getById($id)
+    {
+        return $this->db->get_where($this->_table, ["distributor_id" =>  $id])->row();
+    }
+
+    public function save()
+    {
+        $post = $this->input->post();
+        $this->distributor_id = uniqid();
+        $this->nama_distributor = $post["nama_distributor"];
+        $this->alamat = $post["alamat"];
+        $this->nama_usaha = $post["nama_usaha"];
+        $this->tahun_berdiri = $post["tahun_berdiri"];
+        $this->no_hp = $post["no_hp"];
+        $this->db->insert($this->_table, $this);
+    }
+
+    public function update()
+    {
+        $post = $this->input->post();
+        $this->distributor_id = $post["id"];
+		$this->nama_distributor = $post["nama_distributor"];
+        $this->alamat = $post["alamat"];
+        $this->nama_usaha = $post["nama_usaha"];
+        $this->tahun_berdiri = $post["tahun_berdiri"];
+        $this->no_hp = $post["no_hp"];
+        $this->db->update($this->_table, $this, array('distributor_id' => $post['id']));
+    }
+
+    public function delete($id)
+    {
+        return $this->db->delete($this->_table, array("distributor_id" => $id));
+    }
+    public function tambah($data)
+    {
+        $param = array(
+            'nama_distributor' => $data['nama'],//depan dr database blkg name dr new_form
+            'alamat' => $data['alamat'],
+            'nama_usaha' => $data['nama_usaha'],
+            'tahun_berdiri' => $data['tahun_berdiri'],
+            'no_hp' => $data['no_hp'],
+        );
+        $this->db->insert('distributor', $param);
+    }
+}

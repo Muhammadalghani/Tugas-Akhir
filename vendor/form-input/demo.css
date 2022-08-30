@@ -1,0 +1,44 @@
+@charset "utf-8";
+/* CSS Document */
+
+@import url(http://weloveiconfonts.com/api/?family=fontawesome); 		/*importing fontawesome*/
+/*fontawesome*/
+[class*="fontawesome-"]:before {
+  font-family: 'FontAwesome', sans-serif;
+}
+
+/* "!important is used to overwrite the existing value for a particular property" */
+
+body {
+    color: #fffff !important;
+    text-decoration: none !important;
+}
+hr {		
+	margin-bottom: 10px !important;
+	margin-top: 10px !important;
+	border-top: 1px solid #ccc !important;
+}
+a:focus, a:hover {
+    text-decoration: none !important;
+}		
+.list-group-item {		/*padding for the sidebar list*/
+	padding: 13px 15px !important;
+}
+
+/*For navigation bar*/
+.navbar {
+	 border-radius:0px !important;
+}
+.nav>li>a {
+    padding: 10px 7px !important;
+}
+.navbar-nav>li>a {
+    line-height: 30px !important;
+}
+
+
+
+
+
+
+	
